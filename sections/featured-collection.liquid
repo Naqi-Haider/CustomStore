@@ -1,72 +1,90 @@
 <section class="featured-collection">
   <div class="featured-collection__container">
 
+    <!-- Section Header -->
     <div class="featured-collection__header">
-      <h2>Featured Collection</h2>
-      <p>Explore our most popular products.</p>
+
+      <div class="featured-collection__heading">
+        <h2>{{ section.settings.title }}</h2>
+        <p>{{ section.settings.collection_description }}</p>
+      </div>
+
+      {% if section.settings.featured_collection != blank %}
+        <a
+          href="{{ section.settings.featured_collection.url }}"
+          class="featured-collection__view-all"
+        >
+          View all
+        </a>
+      {% endif %}
+
     </div>
 
+
+    <!-- Products -->
     <div class="featured-collection__grid">
 
-      <!-- Product 1 -->
-      <article class="product-card">
-        <div class="product-card__image">
-          <img
-            src="https://via.placeholder.com/400"
-            alt="Product 1"
+      {% for collection_product in section.settings.featured_collection.products limit: 4 %}
+
+        <article class="product-card">
+
+          <!-- Product Image -->
+          <a
+            href="{{ collection_product.url }}"
+            class="product-card__image-link"
           >
-        </div>
+            <div class="product-card__image">
 
-        <div class="product-card__info">
-          <h3>Product One</h3>
-          <p class="product-card__price">$49.99</p>
-        </div>
-      </article>
+              {% if collection_product.featured_image %}
+                <img
+                  src="{{ collection_product.featured_image | image_url: width: 600 }}"
+                  alt="{{ collection_product.featured_image.alt | default: collection_product.title | escape }}"
+                  loading="lazy"
+                  width="600"
+                  height="600"
+                >
+              {% endif %}
 
-      <!-- Product 2 -->
-      <article class="product-card">
-        <div class="product-card__image">
-          <img
-            src="https://via.placeholder.com/400"
-            alt="Product 2"
-          >
-        </div>
+            </div>
+          </a>
 
-        <div class="product-card__info">
-          <h3>Product Two</h3>
-          <p class="product-card__price">$59.99</p>
-        </div>
-      </article>
 
-      <!-- Product 3 -->
-      <article class="product-card">
-        <div class="product-card__image">
-          <img
-            src="https://via.placeholder.com/400"
-            alt="Product 3"
-          >
-        </div>
+          <!-- Product Information -->
+          <div class="product-card__content">
 
-        <div class="product-card__info">
-          <h3>Product Three</h3>
-          <p class="product-card__price">$39.99</p>
-        </div>
-      </article>
+            <h3 class="product-card__title">
+              <a href="{{ collection_product.url }}">
+                {{ collection_product.title }}
+              </a>
+            </h3>
 
-      <!-- Product 4 -->
-      <article class="product-card">
-        <div class="product-card__image">
-          <img
-            src="https://via.placeholder.com/400"
-            alt="Product 4"
-          >
-        </div>
+            <div class="product-card__price">
 
-        <div class="product-card__info">
-          <h3>Product Four</h3>
-          <p class="product-card__price">$69.99</p>
-        </div>
-      </article>
+              {% if collection_product.compare_at_price > collection_product.price %}
+
+                <span class="product-card__price--sale">
+                  {{ collection_product.price | money }}
+                </span>
+
+                <span class="product-card__price--compare">
+                  {{ collection_product.compare_at_price | money }}
+                </span>
+
+              {% else %}
+
+                <span>
+                  {{ collection_product.price | money }}
+                </span>
+
+              {% endif %}
+
+            </div>
+
+          </div>
+
+        </article>
+
+      {% endfor %}
 
     </div>
 
@@ -77,7 +95,25 @@
 {% schema %}
 {
   "name": "Featured Collection",
-  "settings": [],
+  "settings": [
+    {
+        "type": "text",
+        "id": "title",
+        "label": "Title",
+        "default": "Featured Collection"
+    },
+    {
+        "type": "collection",
+        "id": "featured_collection",
+        "label": "Collection"
+    },
+    {
+        "type": "text",
+        "id": "collection_description",
+        "label": "Collection Description",
+        "default": "Explore our most popular products."
+    }
+  ],
   "presets": [
     {
       "name": "Featured Collection"
@@ -87,7 +123,12 @@
 {% endschema %}
 
 <style>
+    /* =========================================
+    FEATURED COLLECTION
+    ========================================= */
+
     .featured-collection {
+    width: 100%;
     padding: 60px 20px;
     }
 
@@ -96,85 +137,250 @@
     margin: 0 auto;
     }
 
+
+    /* =========================================
+    HEADER
+    ========================================= */
+
     .featured-collection__header {
-    text-align: center;
-    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 35px;
     }
 
-    .featured-collection__header h2 {
+    .featured-collection__heading h2 {
     margin: 0 0 10px;
+
     font-size: 32px;
+    line-height: 1.2;
     }
 
-    .featured-collection__header p {
+    .featured-collection__heading p {
     margin: 0;
+
     color: #666;
-    font-size: 16px;
+    font-size: 15px;
     }
+
+
+    /* =========================================
+    VIEW ALL
+    ========================================= */
+
+    .featured-collection__view-all {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 12px 20px;
+
+    border: 1px solid #222;
+
+    color: #222;
+    background: transparent;
+
+    text-decoration: none;
+    font-size: 14px;
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+    }
+
+    .featured-collection__view-all:hover {
+    background-color: #222;
+    color: white;
+    }
+
+
+    /* =========================================
+    PRODUCT GRID
+    ========================================= */
 
     .featured-collection__grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
+
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+
+    gap: 24px;
     }
 
-    /* Product Card */
+
+    /* =========================================
+    PRODUCT CARD
+    ========================================= */
 
     .product-card {
     min-width: 0;
     }
 
+
+    /* =========================================
+    PRODUCT IMAGE
+    ========================================= */
+
+    .product-card__image-link {
+    display: block;
+
+    color: inherit;
+    text-decoration: none;
+    }
+
     .product-card__image {
     width: 100%;
-    aspect-ratio: 1 / 1;
+
+    /*
+        Wider container is better for cars.
+        4:3 gives the vehicle enough horizontal space.
+    */
+    aspect-ratio: 4 / 3;
+
     overflow: hidden;
+
     background: #f5f5f5;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
     }
 
     .product-card__image img {
+    display: block;
+
     width: 100%;
     height: 100%;
-    display: block;
-    object-fit: cover;
+
+    /*
+        IMPORTANT:
+        contain keeps the entire car visible.
+    */
+    object-fit: contain;
+
+    object-position: center;
+
+    transition: transform 0.3s ease;
     }
 
-    .product-card__info {
-    padding-top: 15px;
+
+    /* Slight zoom without cropping the car */
+
+    .product-card__image-link:hover img {
+    transform: scale(1.03);
     }
 
-    .product-card__info h3 {
-    margin: 0 0 8px;
+
+    /* =========================================
+    PRODUCT INFORMATION
+    ========================================= */
+
+    .product-card__content {
+    padding-top: 14px;
+    }
+
+    .product-card__title {
+    margin: 0 0 7px;
+
     font-size: 16px;
     font-weight: 500;
+    line-height: 1.4;
     }
 
+    .product-card__title a {
+    color: #222;
+    text-decoration: none;
+    }
+
+    .product-card__title a:hover {
+    text-decoration: underline;
+    }
+
+
+    /* =========================================
+    PRICE
+    ========================================= */
+
     .product-card__price {
-    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
     font-size: 15px;
     }
 
-    /* Tablet */
+    .product-card__sale-price {
+    font-weight: 500;
+    }
+
+    .product-card__compare-price {
+    color: #888;
+    text-decoration: line-through;
+    }
+
+
+    /* =========================================
+    TABLET
+    ========================================= */
 
     @media screen and (max-width: 990px) {
-    .featured-collection__grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
+
+    .featured-collection {
+        padding: 50px 20px;
     }
 
-    /* Mobile */
+    .featured-collection__grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px;
+    }
+
+    }
+
+
+    /* =========================================
+    MOBILE
+    ========================================= */
 
     @media screen and (max-width: 600px) {
+
     .featured-collection {
         padding: 40px 15px;
     }
 
-    .featured-collection__header h2 {
+    .featured-collection__header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .featured-collection__heading h2 {
         font-size: 26px;
     }
 
     .featured-collection__grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
     }
+
+    .product-card__image {
+        /*
+        Slightly taller on mobile so cars
+        still have enough room.
+        */
+        aspect-ratio: 4 / 3;
+    }
+
+    .product-card__content {
+        padding-top: 10px;
+    }
+
+    .product-card__title {
+        font-size: 14px;
+    }
+
+    .product-card__price {
+        font-size: 14px;
+    }
+
     }
 </style>
