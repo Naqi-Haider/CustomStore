@@ -1,0 +1,138 @@
+<!-- Open Cart Trigger Button -->
+<button id="cart-btn" class="cart-trigger-btn">
+  <span class="cart-btn-label">
+    {%- if cart.empty? %}Empty Cart{% else %}View Cart{% endif -%}
+  </span>
+  (<span id="cart-count">{{ cart.item_count }}</span>)
+</button>
+<!-- Overlay / Backdrop -->
+<div id="cart-overlay" class="cart-overlay"></div>
+
+<!-- Cart Drawer -->
+<aside id="cart-drawer" class="cart-drawer" aria-hidden="true">
+  <div id="cart-drawer-content">
+    {% if cart.empty? %}
+      <div class="drawer-header">
+        <h2>Your Cart is Empty</h2>
+        <button id="close-cart-btn" class="close-btn" aria-label="Close cart">&times;</button>
+      </div>
+      <div class="empty-state" style="{% unless cart.empty? %}display: none; {% endunless %}">
+        <p>Looks like you haven't added anything to your cart yet.</p>
+        <button class="continue-btn" id="continue-shopping">
+          <a href="{{ routes.all_products_collection_url }}" style="text-decoration: none; color: inherit;"
+            >Continue Shopping</a
+          >
+        </button>
+      </div>
+    {% else %}
+      <!-- Drawer Header -->
+      <div class="drawer-header">
+        <h2>
+          Your Cart (<span class="header-count" id="drawer-item-count">{{ cart.item_count }}</span>)
+        </h2>
+        <button id="close-cart-btn" class="close-btn" aria-label="Close cart">&times;</button>
+      </div>
+
+      <!-- Drawer Items List -->
+      <div class="drawer-body" id="items" style="{% if cart.empty? %}display: none; {% endif %}">
+        {% comment %}
+          The following code is referenced inside the cart-drawer.liquid section to get the updated
+          cart items. This is a temporary solution until we implement AJAX cart updates.
+        {% endcomment %}
+        {% for item in cart.items %}
+          <div class="cart-item" data-line-item-key="{{ item.key }}">
+            <img src="{{ item.image | image_url: width: 300 }}" alt="{{ item.title }}" class="item-img" />
+            <div class="item-details">
+              <h4 class="item-title">{{ item.title }}</h4>
+              {% unless item.product.has_only_default_variant %}
+                {% for option in item.options_with_values %}
+                  <span class="item-variant">{{ option.name }}: {{ option.value }}</span>
+                {% endfor %}
+              {% endunless %}
+              <div class="item-actions">
+                <div class="qty-control">
+                  <button class="qty-btn">-</button>
+                  <input type="number" value="{{ item.quantity }}" min="1" class="qty-input" />
+                  <button class="qty-btn">+</button>
+                </div>
+                <span class="item-price">{{ item.price | money_with_currency }}</span>
+              </div>
+            </div>
+            <a href="{{ item.url_to_remove }}" class="remove-btn">Remove</a>
+          </div>
+        {% endfor %}
+      </div>
+
+      <!-- Drawer Footer -->
+      <div class="drawer-footer">
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span class="subtotal-amount" id="cart-total">{{ cart.total_price | money_with_currency }}</span>
+        </div>
+        <p class="shipping-note">Taxes and shipping calculated at checkout.</p>
+        <a href="{{ routes.cart_url }}/checkout" class="checkout-btn" style="text-decoration: none; color: white;"
+          >Proceed to Checkout</a
+        >
+        <a
+          href="{{ routes.all_products_collection_url }}"
+          class="continue-btn js-continue-shopping"
+          style="text-decoration: none; color: inherit;"
+          >Continue Shopping</a
+        >
+      </div>
+    {% endif %}
+  </div>
+</aside>
+
+<script>
+  const cartDrawer = document.getElementById('cart-drawer');
+  const cartOverlay = document.getElementById('cart-overlay');
+  const openBtn = document.getElementById('cart-btn');
+  {% comment %} const closeBtn = document.getElementById('close-cart-btn');
+  const continueBtn = document.getElementById('continue-shopping'); {% endcomment %}
+
+  function openCart() {
+    cartDrawer.classList.add('open');
+    cartOverlay.classList.add('active');
+    cartDrawer.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden'; // Stop background scrolling
+  }
+
+  function closeCart() {
+    cartDrawer.classList.remove('open');
+    cartOverlay.classList.remove('active');
+    cartDrawer.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  //To open the cart drawer when an item is added to the cart, listen for the 'product:added' event and call the openCart function
+  //This is referenced from product.liquid template.
+  document.addEventListener('product:added', () => {
+    openCart();
+  });
+
+  // Event Listeners
+  openBtn?.addEventListener('click', openCart);
+  cartOverlay?.addEventListener('click', closeCart);
+
+  cartDrawer?.addEventListener('click', (event) => {
+    if (event.target.closest('.close-btn') || event.target.closest('.js-continue-shopping')) {
+      closeCart();
+    }
+  });
+
+  {% comment %} closeBtn?.addEventListener('click', closeCart);
+  continueBtn?.addEventListener('click', closeCart); {% endcomment %}
+
+  // Continue shopping buttons (use querySelectorAll if multiple exist)
+  {% comment %} document.querySelectorAll('.js-continue-shopping, #continue-shopping').forEach((btn) => {
+    btn.addEventListener('click', closeCart);
+  }); {% endcomment %}
+
+  // Close on 'Escape' key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && cartDrawer.classList.contains('open')) {
+      closeCart();
+    }
+  });
+</script>

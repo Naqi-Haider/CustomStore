@@ -1,0 +1,131 @@
+<div class="product-form__quantity">
+  <label
+    for="Quantity-{{ section.id }}"
+    class="product-form__label"
+  >
+    Quantity
+  </label>
+
+  <div class="quantity-selector">
+    <button
+      type="button"
+      class="quantity-selector__button"
+      data-action="decrease"
+    >
+      −
+    </button>
+
+    <input
+      id="Quantity-{{ section.id }}"
+      class="quantity-selector__input"
+      type="number"
+      name="quantity"
+      value="1"
+      min="1"
+    >
+
+    <button
+      type="button"
+      class="quantity-selector__button"
+      data-action="increase"
+    >
+      +
+    </button>
+  </div>
+</div>
+
+<script>
+  if (!window.quantitySelectorInitialized) {
+    window.quantitySelectorInitialized = true;
+
+    document.addEventListener('click', function (event) {
+      const button = event.target.closest('.quantity-selector__button');
+
+      if (!button) return;
+
+      const selector = button.closest('.quantity-selector');
+
+      const input = selector.querySelector('.quantity-selector__input');
+
+      let quantity = parseInt(input.value, 10) || 1;
+
+      if (button.dataset.action === 'increase') {
+        quantity++;
+      }
+
+      if (button.dataset.action === 'decrease') {
+        quantity = Math.max(1, quantity - 1);
+      }
+
+      input.value = quantity;
+    });
+  }
+</script>
+
+<style>
+  .product-form__quantity {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 20px 10px;
+  }
+
+  .product-form__label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #222;
+  }
+
+  .quantity-selector {
+    display: flex;
+    align-items: center;
+    width: 140px;
+    height: 44px;
+    border: 1px solid #d5d5d5;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #fff;
+  }
+
+  .quantity-selector__button {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 100%;
+    border: 0;
+    background: #f7f7f7;
+    color: #222;
+    font-size: 20px;
+    cursor: pointer;
+  }
+
+  .quantity-selector__button:hover {
+    background: #eaeaea;
+  }
+
+  .quantity-selector__input {
+    width: 56px;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    border-left: 1px solid #e5e5e5;
+    border-right: 1px solid #e5e5e5;
+    background: #fff;
+    color: #222;
+    font-size: 16px;
+    font-weight: 500;
+    text-align: center;
+    outline: none;
+  }
+
+  .quantity-selector__input::-webkit-inner-spin-button,
+  .quantity-selector__input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .quantity-selector__input {
+    -moz-appearance: textfield;
+  }
+</style>

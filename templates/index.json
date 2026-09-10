@@ -18,7 +18,11 @@
     "featured_collection_63ty89": {
       "type": "featured-collection",
       "name": "Featured Collection",
-      "settings": {}
+      "settings": {
+        "title": "Featured Collection",
+        "featured_collection": "cars",
+        "collection_description": "This is Cars Collection."
+      }
     }
   },
   "order": [
