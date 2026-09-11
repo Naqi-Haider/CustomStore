@@ -228,8 +228,25 @@
             currentContent.innerHTML = newContent.innerHTML;
           }
 
-          document.getElementById('cart-count').textContent = count;
-          document.querySelector('.cart-btn-label').textContent = count > 0 ? 'View Cart' : 'Empty Cart';
+          const newCartCount = dom.querySelector('#cart-count');
+          const currentCartCount = document.querySelector('#cart-count');
+
+          {% comment %} const newCartLabel = dom.querySelector('.cart-btn-label'); {% endcomment %}
+          const currentCartLabel = document.querySelector('.cart-btn-label');
+
+          if (newCartCount && currentCartCount) {
+            currentCartCount.textContent = newCartCount.textContent;
+          }
+
+          if (newCartCount && currentCartLabel) {
+              const count = Number(newCartCount.textContent.trim());
+
+              currentCartLabel.textContent =
+                  count === 0 ? 'Empty Cart' : 'View Cart';
+          }
+
+          {% comment %} document.getElementById('cart-count').textContent = count;
+          document.querySelector('.cart-btn-label').textContent = count > 0 ? 'View Cart' : 'Empty Cart'; {% endcomment %}
           
           {% comment %} const count = parseInt(dom.querySelector('#cart-count')?.textContent || '0',10);
           const buttonLabel = document.querySelector('.cart-btn-label');

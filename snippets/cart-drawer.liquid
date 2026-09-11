@@ -52,7 +52,13 @@
               <div class="item-actions">
                 <quantity-input data-variant-id="{{ item.variant_id }}" class="qty-control">
                   <button class="qty-btn minus">-</button>
-                  <input type="number" id="qty-input-field-value" value="{{ item.quantity }}" min="1" class="qty-input" />
+                  <input
+                    type="number"
+                    id="qty-input-field-value"
+                    value="{{ item.quantity }}"
+                    min="1"
+                    class="qty-input"
+                  />
                   <button class="qty-btn plus">+</button>
                 </quantity-input>
                 <span class="item-price">{{ item.price | money_with_currency }}</span>
@@ -170,15 +176,17 @@
       const newCartCount = doc.querySelector('#cart-count');
       const currentCartCount = document.querySelector('#cart-count');
 
-      const newCartLabel = doc.querySelector('.cart-btn-label');
       const currentCartLabel = document.querySelector('.cart-btn-label');
 
       if (newCartCount && currentCartCount) {
-        currentCartCount.textContent = newCartCount.textContent;
+          currentCartCount.textContent = newCartCount.textContent;
       }
 
-      if (newCartLabel && currentCartLabel) {
-        currentCartLabel.textContent = newCartLabel.textContent;
+      if (newCartCount && currentCartLabel) {
+          const count = Number(newCartCount.textContent.trim());
+
+          currentCartLabel.textContent =
+              count === 0 ? 'Empty Cart' : 'View Cart';
       }
 
       // Update cart count if you use it elsewhere

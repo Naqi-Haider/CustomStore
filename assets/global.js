@@ -45,7 +45,7 @@ class QuantityInput extends HTMLElement {
             console.log("plus");
 
             const updatedValue = this.qtyInput + 1;
-            console.log("Updated Value: ", updatedValue, this.variantId);
+            console.log("Plus: ", updatedValue, this.variantId);
 
             let updates = {
                 [this.variantId]: updatedValue
@@ -64,15 +64,56 @@ class QuantityInput extends HTMLElement {
 
                 //To refresh the cart:
                 document.dispatchEvent(new CustomEvent('refresh:cart'));
-                
+
             } catch (error) {
-                console.log("error plus: ",error);
+                console.log("error plus: ", error);
             }
         })
 
-        this.minusButton.addEventListener('click', (e) => {
+        this.minusButton.addEventListener('click', async (e) => {
             e.preventDefault();
             console.log("minus");
+
+            const updatedValue = this.qtyInput - 1;
+            console.log("Minus: ", updatedValue, this.variantId);
+
+            let updates = {
+                [this.variantId]: updatedValue
+            };
+
+            try {
+                const res = await fetch(window.Shopify.routes.root + 'cart/update.js', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ updates })
+                })
+                // const data = await res.json();
+                // console.log("Updated Cart Data: ", data);
+
+                //To refresh the cart:
+                document.dispatchEvent(new CustomEvent('refresh:cart'));
+
+                const newCartCount = doc.querySelector('#cart-count');
+                const currentCartCount = document.querySelector('#cart-count');
+
+                // const newCartLabel = doc.querySelector('.cart-btn-label');
+                const currentCartLabel = document.querySelector('.cart-btn-label');
+
+                if (newCartCount && currentCartCount) {
+                    currentCartCount.textContent = newCartCount.textContent;
+                }
+
+                if (newCartCount && currentCartLabel) {
+                    const count = Number(newCartCount.textContent.trim());
+
+                    currentCartLabel.textContent = count === 0 ? 'Empty Cart' : 'View Cart';
+                }
+
+            } catch (error) {
+                console.log("error minus: ", error);
+            }
         })
     }
 }
