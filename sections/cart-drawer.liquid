@@ -29,11 +29,11 @@
               {% endfor %}
             {% endunless %}
             <div class="item-actions">
-              <div class="qty-control">
-                <button class="qty-btn">-</button>
-                <input type="number" value="{{ item.quantity }}" min="1" class="qty-input" />
-                <button class="qty-btn">+</button>
-              </div>
+              <quantity-input data-variant-id="{{ item.variant_id }}" class="qty-control">
+                <button class="qty-btn minus">-</button>
+                <input type="number" id="qty-input-field-value" value="{{ item.quantity }}" min="1" class="qty-input" />
+                <button class="qty-btn plus">+</button>
+              </quantity-input>
               <span class="item-price">{{ item.price | money_with_currency }}</span>
             </div>
           </div>
