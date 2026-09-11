@@ -149,6 +149,11 @@
   //Refresh Cart function:
   async function refreshCartDrawer() {
     try {
+
+      //Loading:
+      document.querySelector('#cart-drawer-content').classList.add('loading');
+
+      //Response:
       const response = await fetch(`${window.Shopify.routes.root}?sections=cart-drawer`);
 
       if (!response.ok) {
@@ -201,6 +206,9 @@
     } catch (error) {
       console.error('Failed to refresh cart drawer:', error);
     }
+
+    //Remove loading:
+    document.querySelector('#cart-drawer-content').classList.remove('loading');
   }
 
   {% comment %} closeBtn?.addEventListener('click', closeCart);
