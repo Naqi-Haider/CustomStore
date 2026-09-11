@@ -6,94 +6,95 @@
       <!-- Cart Items -->
       {% if cart.empty? %}
         <p>CART IS EMPTY</p>
-        <a href="/">Go back to shopping</a>
+        <a href="{{ routes.root_url }}">Go back to shopping</a>
 
       {% else %}
         <div class="cart-items">
           {% for item in cart.items %}
             <!-- Cart Item -->
             <article class="cart-item">
-            <!-- Product Image -->
-            <div class="cart-item__image">
-              {% if item.image %}
-                <img
-                  src="{{ item.image | image_url: width: 300 }}"
-                  alt="{{ item.title }}"
-                  class="product-img"
-                  width="300"
-                >
-              {% endif %}
-            </div>
-
-            <!-- Product Details -->
-            <div class="cart-item__details">
-              <div class="cart-item__info">
-                <h2>
-                  <a href="{{ item.url }}">
-                    {{ item.product.title }}
-                  </a>
-                </h2>
-
-                <!-- Variant Options -->
-                {% unless item.product.has_only_default_variant %}
-                  {% for option in item.options_with_values %}
-                    <p class="cart-item__variant">{{ option.name }}: {{ option.value }}</p>
-                  {% endfor %}
-                {% endunless %}
+              <!-- Product Image -->
+              <div class="cart-item__image">
+                {% if item.image %}
+                  <img
+                    src="{{ item.image | image_url: width: 300 }}"
+                    alt="{{ item.title }}"
+                    class="product-img"
+                    width="300"
+                    height="400"
+                  >
+                {% endif %}
               </div>
 
-              <!-- Quantity + Remove -->
-              <div class="cart-item__bottom">
-                <div class="quantity-selector">
-                  {% comment %} <button
-                    type="button"
-                    onclick="this.nextElementSibling.stepDown(); this.nextElementSibling.dispatchEvent(new Event('change', { bubbles: true }));"
-                  >
-                    -
-                  </button>
+              <!-- Product Details -->
+              <div class="cart-item__details">
+                <div class="cart-item__info">
+                  <h2>
+                    <a href="{{ item.url }}">
+                      {{ item.product.title }}
+                    </a>
+                  </h2>
 
-                  <input
-                    type="number"
-                    value="{{ item.quantity }}"
-                    min="0"
-                    class="quantity-input"
-                    data-line="{{ forloop.index }}"
-                  >
-
-                  <button
-                    type="button"
-                    onclick="this.previousElementSibling.stepUp(); this.previousElementSibling.dispatchEvent(new Event('change', { bubbles: true }));"
-                  >
-                    +
-                  </button>
+                  <!-- Variant Options -->
+                  {% unless item.product.has_only_default_variant %}
+                    {% for option in item.options_with_values %}
+                      <p class="cart-item__variant">{{ option.name }}: {{ option.value }}</p>
+                    {% endfor %}
+                  {% endunless %}
                 </div>
-                Remove {% endcomment %}
-                <!-- Quantity Selector -->
-                <p>
-                  Quantity: {{ item.quantity }}
-                </p>
-            </div>
-            <a href="{{ item.url_to_remove }}" class="remove-btn">Remove</a>
-        </div>
 
-            <!-- Price -->
-            <div class="cart-item__price">
-              {% if item.original_line_price != item.final_line_price %}
-                <span class="cart-item__price--sale">
-                  {{ item.final_line_price | money_with_currency }}
-                </span>
+                <!-- Quantity + Remove -->
+                <div class="cart-item__bottom">
+                  <div class="quantity-selector">
+                    {% comment %}
+                      <button
+                          type="button"
+                          onclick="this.nextElementSibling.stepDown(); this.nextElementSibling.dispatchEvent(new Event('change', { bubbles: true }));"
+                        >
+                          -
+                        </button>
 
-                <s>
-                  {{ item.original_line_price | money_with_currency }}
-                </s>
-              {% else %}
-                <span>
-                  {{ item.final_line_price | money_with_currency }}
-                </span>
-              {% endif %}
-            </div>
-          </article>
+                        <input
+                          type="number"
+                          value="{{ item.quantity }}"
+                          min="0"
+                          class="quantity-input"
+                          data-line="{{ forloop.index }}"
+                        >
 
+                        <button
+                          type="button"
+                          onclick="this.previousElementSibling.stepUp(); this.previousElementSibling.dispatchEvent(new Event('change', { bubbles: true }));"
+                        >
+                          +
+                        </button>
+                      </div>
+                      Remove
+                    {% endcomment %}
+                    <!-- Quantity Selector -->
+                    <p>Quantity: {{ item.quantity }}</p>
+                  </div>
+                  <a href="{{ item.url_to_remove }}" class="remove-btn">Remove</a>
+                </div>
+              </div>
+
+              <!-- Price -->
+              <div class="cart-item__price">
+                {% if item.original_line_price != item.final_line_price %}
+                  <span class="cart-item__price--sale">
+                    {{ item.final_line_price | money_with_currency }}
+                  </span>
+
+                  <s>
+                    {{ item.original_line_price | money_with_currency }}
+                  </s>
+                {% else %}
+                  <span>
+                    {{ item.final_line_price | money_with_currency }}
+                  </span>
+                {% endif %}
+              </div>
+            </article>
           {%- endfor %}
         </div>
 
@@ -133,7 +134,7 @@
 <style>
   /* =========================
    CART PAGE
-========================= */
+  ========================= */
 
   .cart-page {
     width: 100%;
@@ -148,7 +149,7 @@
 
   /* =========================
    CART HEADER
-========================= */
+  ========================= */
 
   .cart-header > h1 {
     margin: 0 0 35px;
@@ -160,7 +161,7 @@
 
   /* =========================
    CART ITEMS
-========================= */
+  ========================= */
 
   .cart-items {
     display: flex;
@@ -189,7 +190,7 @@
 
   /* =========================
    PRODUCT IMAGE
-========================= */
+  ========================= */
 
   .cart-item__image {
     width: 120px;
@@ -213,7 +214,7 @@
 
   /* =========================
    PRODUCT DETAILS
-========================= */
+  ========================= */
 
   .cart-item__details {
     min-width: 0;
@@ -249,7 +250,7 @@
 
   /* =========================
    QUANTITY / REMOVE
-========================= */
+  ========================= */
 
   .cart-item__bottom {
     display: flex;
@@ -295,7 +296,7 @@
    QUANTITY SELECTOR
    Works if you enable your
    +/- buttons later
-========================= */
+  ========================= */
 
   .quantity-selector {
     display: inline-flex;
@@ -353,7 +354,7 @@
 
   /* =========================
    PRICE
-========================= */
+  ========================= */
 
   .cart-item__price {
     align-self: center;
@@ -383,7 +384,7 @@
 
   /* =========================
    CART CONTENT
-========================= */
+  ========================= */
 
   .cart-content {
     display: flex;
@@ -394,7 +395,7 @@
 
   /* =========================
    CART SUMMARY
-========================= */
+  ========================= */
 
   .cart-summary {
     width: 100%;
@@ -421,7 +422,7 @@
 
   /* =========================
    SUMMARY ROWS
-========================= */
+  ========================= */
 
   .summary-row {
     display: flex;
@@ -443,7 +444,7 @@
 
   /* =========================
    DIVIDER
-========================= */
+  ========================= */
 
   .summary-divider {
     height: 1px;
@@ -454,7 +455,7 @@
 
   /* =========================
    TOTAL
-========================= */
+  ========================= */
 
   .summary-total {
     display: flex;
@@ -474,7 +475,7 @@
 
   /* =========================
    CHECKOUT BUTTON
-========================= */
+  ========================= */
 
   .checkout-button {
     display: flex;
@@ -515,7 +516,7 @@
 
   /* =========================
    CONTINUE SHOPPING
-========================= */
+  ========================= */
 
   .continue-shopping {
     display: flex;
@@ -537,7 +538,7 @@
 
   /* =========================
    EMPTY CART
-========================= */
+  ========================= */
 
   .cart-header > p {
     margin: 0 0 15px;
@@ -567,7 +568,7 @@
 
   /* =========================
    TABLET
-========================= */
+  ======================= */
 
   @media screen and (max-width: 768px) {
     .cart-page {
@@ -612,7 +613,7 @@
 
   /* =========================
    MOBILE
-========================= */
+  ======================= */
 
   @media screen and (max-width: 480px) {
     .cart-page {

@@ -58,7 +58,9 @@
                 <span class="item-price">{{ item.price | money_with_currency }}</span>
               </div>
             </div>
-            <a href="{{ item.url_to_remove }}" class="remove-btn">Remove</a>
+            <delete-button>
+              <a href="{{ item.url_to_remove }}" class="remove-btn">Remove</a>
+            </delete-button>
           </div>
         {% endfor %}
       </div>
@@ -96,6 +98,19 @@
     cartOverlay.classList.add('active');
     cartDrawer.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden'; // Stop background scrolling
+
+    //Provide some delay as it would take time to load all the event listeners after opening the cart drawer.
+    //Also it's inside this function because we want to add the event listeners only when the cart drawer is opened.
+    //Whenever the section is re-rendered without refreshing the page this would still exist.
+    {% comment %} setTimeout(() => {
+      console.log(document.querySelectorAll('.remove-btn'));
+      document.querySelectorAll('.remove-btn').forEach(button => {
+      button.addEventListener('click', (event) => {
+        event.preventDefault();
+        console.log(button);
+      });
+    })
+    }, 100); {% endcomment %}
   }
 
   function closeCart() {
@@ -120,6 +135,65 @@
       closeCart();
     }
   });
+
+  document.addEventListener('refresh:cart', (e) => {
+    refreshCartDrawer();
+  })
+
+  //Refresh Cart function:
+  async function refreshCartDrawer() {
+    try {
+      const response = await fetch(`${window.Shopify.routes.root}?sections=cart-drawer`);
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch cart drawer');
+      }
+
+      const sections = await response.json();
+
+      const html = sections['cart-drawer'];
+
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+
+      const newContent = doc.querySelector('#cart-drawer-content');
+      const currentContent = document.querySelector('#cart-drawer-content');
+
+      if (newContent && currentContent) {
+        currentContent.replaceWith(newContent);
+      }
+
+      // -----------------------------
+      // 2. Update Cart Trigger
+      // -----------------------------
+
+      const newCartCount = doc.querySelector('#cart-count');
+      const currentCartCount = document.querySelector('#cart-count');
+
+      const newCartLabel = doc.querySelector('.cart-btn-label');
+      const currentCartLabel = document.querySelector('.cart-btn-label');
+
+      if (newCartCount && currentCartCount) {
+        currentCartCount.textContent = newCartCount.textContent;
+      }
+
+      if (newCartLabel && currentCartLabel) {
+        currentCartLabel.textContent = newCartLabel.textContent;
+      }
+
+      // Update cart count if you use it elsewhere
+      {% comment %} const newCartCount = doc.querySelector('#cart-count');
+      const currentCartCount = document.querySelector('#cart-count');
+
+      if (newCartCount && currentCartCount) {
+        currentCartCount.replaceWith(newCartCount);
+      } {% endcomment %}
+      
+
+    } catch (error) {
+      console.error('Failed to refresh cart drawer:', error);
+    }
+  }
 
   {% comment %} closeBtn?.addEventListener('click', closeCart);
   continueBtn?.addEventListener('click', closeCart); {% endcomment %}

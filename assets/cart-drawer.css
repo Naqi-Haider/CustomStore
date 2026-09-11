@@ -13,6 +13,18 @@
     flex: 1;
 }
 
+.empty-state {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 24px;
+    text-align: center;
+    color: #555;
+}
+
 
 .remove-btn {
     display: inline-flex;

@@ -9,6 +9,8 @@
     {% comment %} For the cart-drawer section rendering api {% endcomment %}
     {{ 'cart-drawer.css' | asset_url | stylesheet_tag }}
 
+    <script src="{{ 'global.js' | asset_url }}" defer></script>
+
 </head>
 <body>
     {% render 'cart-drawer' %}

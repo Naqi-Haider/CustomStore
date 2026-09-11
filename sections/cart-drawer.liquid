@@ -37,7 +37,9 @@
               <span class="item-price">{{ item.price | money_with_currency }}</span>
             </div>
           </div>
-          <a href="{{ item.url_to_remove }}" class="remove-btn">Remove</a>
+          <delete-button>
+            <a href="{{ item.url_to_remove }}" class="remove-btn">Remove</a>
+          </delete-button>
         </div>
       {% endfor %}
     </div>
