@@ -14,29 +14,40 @@
     <!-- Navigation -->
     <nav class="main-nav" aria-label="Main navigation">
       <ul class="nav-list">
-        <li class="nav-item">
-          <a href="{{ routes.root_url }}" class="nav-link"> Home </a>
-        </li>
+        {% for link in settings.header_nav.links %}
+          <li class="nav-item {% if link.handle == 'catalog' %}has-mega-menu{% endif %}">
+            <a class="{% if link.active %}active{% endif %}" href="{{ link.url }}">{{ link.title }}</a>
+            {% if link.handle == 'catalog' %}
+              {% render 'mega-menu' %}
+            {% endif %}
+          </li>
+        {% endfor %}
 
-        <li class="nav-item">
-          <a href="/collections/all" class="nav-link"> Cars </a>
-        </li>
+        {% comment %}
+          <li class="nav-item">
+            <a href="{{ routes.root_url }}" class="nav-link"> Home </a>
+          </li>
 
-        <li class="nav-item">
-          <a href="/collections/toyota" class="nav-link"> Toyota </a>
-        </li>
+          <li class="nav-item">
+            <a href="/collections/all" class="nav-link"> Cars </a>
+          </li>
 
-        <li class="nav-item">
-          <a href="/collections/honda" class="nav-link"> Honda </a>
-        </li>
+          <li class="nav-item">
+            <a href="/collections/toyota" class="nav-link"> Toyota </a>
+          </li>
 
-        <li class="nav-item">
-          <a href="/pages/about-us" class="nav-link"> About </a>
-        </li>
+          <li class="nav-item">
+            <a href="/collections/honda" class="nav-link"> Honda </a>
+          </li>
 
-        <li class="nav-item">
-          <a href="/pages/contact" class="nav-link"> Contact </a>
-        </li>
+          <li class="nav-item">
+            <a href="/pages/about-us" class="nav-link"> About </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="/pages/contact" class="nav-link"> Contact </a>
+          </li>
+        {% endcomment %}
       </ul>
     </nav>
 
@@ -168,8 +179,22 @@
   }
 
   .nav-item {
+    list-style: none;
     margin: 0;
     padding: 0;
+    color: black;
+  }
+
+  .nav-item a {
+    display: block;
+    padding: 10px 15px;
+    text-decoration: none;
+    color: inherit;
+    transition: color 0.2s ease;
+  }
+
+  .nav-item a:hover {
+    color: #777;
   }
 
   .nav-link {

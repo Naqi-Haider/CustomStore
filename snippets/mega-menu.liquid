@@ -1,0 +1,290 @@
+<div class="mega-menu">
+  <div class="mega-menu__content">
+    <!-- Link Columns -->
+    <div class="mega-menu__links">
+      <!-- Column 1 -->
+      <div class="mega-menu__column">
+        <h3 class="mega-menu__heading">Toyota</h3>
+
+        <a href="#" class="mega-menu__link">Toyota Corolla</a>
+        <a href="#" class="mega-menu__link">Toyota Yaris</a>
+        <a href="#" class="mega-menu__link">Toyota Camry</a>
+        <a href="#" class="mega-menu__link">Toyota Prius</a>
+        <a href="#" class="mega-menu__link">Toyota Fortuner</a>
+      </div>
+
+      <!-- Column 2 -->
+      <div class="mega-menu__column">
+        <h3 class="mega-menu__heading">Honda</h3>
+
+        <a href="#" class="mega-menu__link">Honda Civic</a>
+        <a href="#" class="mega-menu__link">Honda City</a>
+        <a href="#" class="mega-menu__link">Honda Accord</a>
+        <a href="#" class="mega-menu__link">Honda HR-V</a>
+        <a href="#" class="mega-menu__link">Honda CR-V</a>
+      </div>
+    </div>
+
+    <!-- Promotional Banner -->
+    <div class="mega-menu__promo">
+      <img
+        src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7"
+        alt="Featured car"
+        class="mega-menu__promo-image"
+        width="400"
+        height="250"
+      >
+
+      <div class="mega-menu__promo-content">
+        <span class="mega-menu__promo-label">Featured</span>
+
+        <h3>Find Your Dream Car</h3>
+
+        <p>Explore our latest collection of premium vehicles.</p>
+
+        <a href="#" class="mega-menu__promo-button"> Explore Cars </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* =========================
+   Mega Menu
+========================= */
+
+  .mega-menu {
+    display: none;
+
+    position: absolute;
+    top: 100%;
+    left: 0;
+
+    width: 100%;
+
+    background: #fff;
+    border-top: 1px solid #eee;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+
+    z-index: 1000;
+  }
+
+  .has-mega-menu {
+    position: static;
+  }
+
+  .has-mega-menu:hover .mega-menu {
+    display: block;
+  }
+
+  /* =========================
+   Main Content
+========================= */
+
+  .mega-menu__content {
+    max-width: 1200px;
+    margin: 0 auto;
+
+    padding: 35px 30px;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+  }
+
+  /* =========================
+   Link Area
+========================= */
+
+  .mega-menu__links {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+
+  /* =========================
+   Link Column
+========================= */
+
+  .mega-menu__column {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  /* =========================
+   Heading
+========================= */
+
+  .mega-menu__heading {
+    margin: 0 0 18px;
+
+    font-size: 16px;
+    font-weight: 700;
+
+    color: #111111;
+  }
+
+  /* =========================
+   Links
+========================= */
+
+  .mega-menu__link {
+    display: block;
+
+    margin-bottom: 12px;
+
+    color: #555555;
+    text-decoration: none;
+
+    font-size: 14px;
+
+    transition: color 0.2s ease, transform 0.2s ease;
+  }
+
+  .mega-menu__link:hover {
+    color: #111111;
+    transform: translateX(3px);
+  }
+
+  /* =========================
+   Promotional Banner
+========================= */
+
+  .mega-menu__promo {
+    position: relative;
+
+    min-height: 250px;
+
+    overflow: hidden;
+
+    border-radius: 10px;
+
+    background: #111111;
+  }
+
+  /* =========================
+   Banner Image
+========================= */
+
+  .mega-menu__promo-image {
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    opacity: 0.55;
+  }
+
+  /* =========================
+   Banner Content
+========================= */
+
+  .mega-menu__promo-content {
+    position: relative;
+
+    z-index: 1;
+
+    height: 100%;
+    min-height: 250px;
+
+    padding: 30px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+
+    color: #ffffff;
+  }
+
+  /* =========================
+   Promo Label
+========================= */
+
+  .mega-menu__promo-label {
+    margin-bottom: 8px;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* =========================
+   Promo Heading
+========================= */
+
+  .mega-menu__promo-content h3 {
+    margin: 0 0 10px;
+
+    font-size: 26px;
+    line-height: 1.2;
+  }
+
+  /* =========================
+   Promo Text
+========================= */
+
+  .mega-menu__promo-content p {
+    max-width: 300px;
+
+    margin: 0 0 20px;
+
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* =========================
+   Promo Button
+========================= */
+
+  .mega-menu__promo-button {
+    display: inline-block;
+
+    padding: 10px 18px;
+
+    background: #ffffff;
+    color: #111111;
+
+    border-radius: 5px;
+
+    text-decoration: none;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  .mega-menu__promo-button:hover {
+    background: #111111;
+    color: #ffffff;
+  }
+
+  /* =========================
+   Responsive
+========================= */
+
+  @media (max-width: 768px) {
+    .mega-menu__content {
+      grid-template-columns: 1fr;
+    }
+
+    .mega-menu__promo {
+      display: none;
+    }
+  }
+
+  @media (max-width: 500px) {
+    .mega-menu__links {
+      grid-template-columns: 1fr;
+      gap: 25px;
+    }
+  }
+</style>
