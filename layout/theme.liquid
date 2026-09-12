@@ -10,12 +10,12 @@
     {{ 'cart-drawer.css' | asset_url | stylesheet_tag }}
 
     <script src="{{ 'global.js' | asset_url }}" defer></script>
+  </head>
+  <body>
+    {% sections 'header-group' %}
 
-</head>
-<body>
-
-    {% render 'navbar' %}
+    {% comment %} {% render 'navbar' %} {% endcomment %}
     {% render 'cart-drawer' %}
     {{ content_for_layout }}
-</body>
+  </body>
 </html>

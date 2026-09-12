@@ -1,4 +1,4 @@
-{% comment %} <header class="site-header">
+<header class="site-header">
   <div class="header-container">
     <!-- Logo -->
     <div class="header-logo">
@@ -14,7 +14,7 @@
     <!-- Navigation -->
     <nav class="main-nav" aria-label="Main navigation">
       <ul class="nav-list">
-        {% for link in settings.header_nav.links %}
+        {% for link in section.settings.header_nav.links %}
           <li class="nav-item {% if link.handle == 'catalog' %}has-mega-menu{% endif %}">
             <a class="{% if link.active %}active{% endif %}" href="{{ link.url }}">{{ link.title }}</a>
             {% if link.handle == 'catalog' %}
@@ -101,6 +101,24 @@
     </div>
   </div>
 </header>
+
+{% schema %}
+{
+  "name": "Navbar",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "header_nav",
+      "label": "Header navigation"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Navbar"
+    }
+  ]
+}
+{% endschema %}
 
 <style>
   /* =========================
@@ -363,4 +381,4 @@
       height: 42px;
     }
   }
-</style> {% endcomment %}
+</style>
