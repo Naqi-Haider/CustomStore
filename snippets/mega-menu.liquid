@@ -6,7 +6,7 @@
   </pre>
 {% endcomment %}
 
-<div class="mega-menu">
+<div class="mega-menu" id="{{ block.id }}" {{ block.shopify_attributes }}>
   <div class="mega-menu__content">
     <!-- Link Columns -->
     <div class="mega-menu__links">
@@ -46,11 +46,11 @@
     </div>
 
     <!-- Promotional Banner -->
-    {% if block.settings.image != blank %}
+    {% if block.settings.mega_image != blank %}
       <div class="mega-menu__promo">
-        <a href="{{ block.settings.link }}">
+        <a href="{{ block.settings.mega_image_url }}">
           <img
-            src="{{ block.settings.image | image_url: width: 500 }}"
+            src="{{ block.settings.mega_image | image_url: width: 500 }}"
             alt="Featured car"
             class="mega-menu__promo-image"
             width="400"
@@ -74,13 +74,35 @@
   </div>
 </div>
 
+{% if request.design_mode %}
+  <script>
+    document.addEventListener('shopify:block:select', (e) => {
+      console.log('shopify:block:select', e);
+
+      const block_element = document.getElementById(e.detail.blockId);
+      if (block_element) {
+        block_element.classList.add('force-show');
+      }
+    });
+
+    document.addEventListener('shopify:block:deselect', (e) => {
+      console.log('shopify:block:deselect', e);
+
+      const block_element = document.getElementById(e.detail.blockId);
+      if (block_element) {
+        block_element.classList.remove('force-show');
+      }
+    });
+  </script>
+{% endif %}
+
 <style>
   /* =========================
    Mega Menu
     ========================= */
 
   .mega-menu {
-    display: none;
+    display: block;
 
     position: absolute;
     top: 100%;
@@ -93,6 +115,13 @@
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
 
     z-index: 1000;
+
+    /* Hidden state */
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+
+    transition: opacity 0.2s ease, visibility 0.2s ease;
   }
 
   .has-mega-menu {
@@ -100,7 +129,9 @@
   }
 
   .has-mega-menu:hover .mega-menu {
-    display: block;
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
   }
 
   /* =========================

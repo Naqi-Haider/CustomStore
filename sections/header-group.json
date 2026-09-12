@@ -19,7 +19,8 @@
             "handle": "catalog",
             "mega_1": "snowboard",
             "mega_2": "cars",
-            "mega_image_url": ""
+            "mega_image": "shopify://shop_images/theme_cover_image.jpg",
+            "mega_image_url": "shopify://products/lexus-lx-600"
           }
         }
       },
