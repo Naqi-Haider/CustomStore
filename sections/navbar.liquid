@@ -17,9 +17,16 @@
         {% for link in section.settings.header_nav.links %}
           <li class="nav-item {% if link.handle == 'catalog' %}has-mega-menu{% endif %}">
             <a class="{% if link.active %}active{% endif %}" href="{{ link.url }}">{{ link.title }}</a>
-            {% if link.handle == 'catalog' %}
+            {% for block in section.blocks %}
+              {% if block.settings.handle == link.handle %}
+                {% render 'mega-menu', block: block %}
+              {% endif %}
+            {% endfor %}
+            {% comment %} 
+             Instead of hardcoding we will use the block settings to render the mega menu for the catalog link.
+             {% if link.handle == 'catalog' %}
               {% render 'mega-menu' %}
-            {% endif %}
+            {% endif %} {% endcomment %}
           </li>
         {% endfor %}
 

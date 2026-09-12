@@ -1,57 +1,83 @@
+{% assign menu_1 = block.settings.mega_1 %}
+{% assign menu_2 = block.settings.mega_2 %}
+{% comment %}
+  <pre>
+      {{ menu_1.title }}
+  </pre>
+{% endcomment %}
+
 <div class="mega-menu">
   <div class="mega-menu__content">
     <!-- Link Columns -->
     <div class="mega-menu__links">
       <!-- Column 1 -->
-      <div class="mega-menu__column">
-        <h3 class="mega-menu__heading">Toyota</h3>
 
-        <a href="#" class="mega-menu__link">Toyota Corolla</a>
-        <a href="#" class="mega-menu__link">Toyota Yaris</a>
-        <a href="#" class="mega-menu__link">Toyota Camry</a>
-        <a href="#" class="mega-menu__link">Toyota Prius</a>
-        <a href="#" class="mega-menu__link">Toyota Fortuner</a>
-      </div>
+      {% if menu_1 != blank %}
+        <div class="mega-menu__column">
+          <h3 class="mega-menu__heading">{{ menu_1.title }}</h3>
 
-      <!-- Column 2 -->
-      <div class="mega-menu__column">
-        <h3 class="mega-menu__heading">Honda</h3>
+          {% for m1_link in menu_1.links %}
+            <a href="{{ m1_link.url }}" class="mega-menu__link">{{ m1_link.title }}</a>
+          {% endfor %}
+          {% comment %}
+            <a href="#" class="mega-menu__link">Toyota Yaris</a>
+            <a href="#" class="mega-menu__link">Toyota Camry</a>
+            <a href="#" class="mega-menu__link">Toyota Prius</a>
+            <a href="#" class="mega-menu__link">Toyota Fortuner</a>
+          {% endcomment %}
+        </div>
+      {% endif %}
 
-        <a href="#" class="mega-menu__link">Honda Civic</a>
-        <a href="#" class="mega-menu__link">Honda City</a>
-        <a href="#" class="mega-menu__link">Honda Accord</a>
-        <a href="#" class="mega-menu__link">Honda HR-V</a>
-        <a href="#" class="mega-menu__link">Honda CR-V</a>
-      </div>
+      {% if menu_2 != blank %}
+        <!-- Column 2 -->
+        <div class="mega-menu__column">
+          <h3 class="mega-menu__heading">{{ menu_2.title }}</h3>
+          {% for m2_link in menu_2.links %}
+            <a href="{{ m2_link.url }}" class="mega-menu__link">{{ m2_link.title }}</a>
+          {% endfor %}
+          {% comment %}
+            <a href="#" class="mega-menu__link">Honda City</a>
+            <a href="#" class="mega-menu__link">Honda Accord</a>
+            <a href="#" class="mega-menu__link">Honda HR-V</a>
+            <a href="#" class="mega-menu__link">Honda CR-V</a>
+          {% endcomment %}
+        </div>
+      {% endif %}
     </div>
 
     <!-- Promotional Banner -->
-    <div class="mega-menu__promo">
-      <img
-        src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7"
-        alt="Featured car"
-        class="mega-menu__promo-image"
-        width="400"
-        height="250"
-      >
+    {% if block.settings.image != blank %}
+      <div class="mega-menu__promo">
+        <a href="{{ block.settings.link }}">
+          <img
+            src="{{ block.settings.image | image_url: width: 500 }}"
+            alt="Featured car"
+            class="mega-menu__promo-image"
+            width="400"
+            height="250"
+          >
+        </a>
 
-      <div class="mega-menu__promo-content">
-        <span class="mega-menu__promo-label">Featured</span>
+        {% comment %}
+          <div class="mega-menu__promo-content">
+            <span class="mega-menu__promo-label">Featured</span>
 
-        <h3>Find Your Dream Car</h3>
+            <h3>Find Your Dream Car</h3>
 
-        <p>Explore our latest collection of premium vehicles.</p>
+            <p>Explore our latest collection of premium vehicles.</p>
 
-        <a href="#" class="mega-menu__promo-button"> Explore Cars </a>
+            <a href="#" class="mega-menu__promo-button"> Explore Cars </a>
+          </div>
+        {% endcomment %}
       </div>
-    </div>
+    {% endif %}
   </div>
 </div>
 
 <style>
   /* =========================
    Mega Menu
-========================= */
+    ========================= */
 
   .mega-menu {
     display: none;
@@ -79,7 +105,7 @@
 
   /* =========================
    Main Content
-========================= */
+    ========================= */
 
   .mega-menu__content {
     max-width: 1200px;
@@ -94,7 +120,7 @@
 
   /* =========================
    Link Area
-========================= */
+    ========================= */
 
   .mega-menu__links {
     display: grid;
@@ -104,7 +130,7 @@
 
   /* =========================
    Link Column
-========================= */
+    ===================== */
 
   .mega-menu__column {
     display: flex;
@@ -114,7 +140,7 @@
 
   /* =========================
    Heading
-========================= */
+    ===================== */
 
   .mega-menu__heading {
     margin: 0 0 18px;
@@ -127,7 +153,7 @@
 
   /* =========================
    Links
-========================= */
+    ========================= */
 
   .mega-menu__link {
     display: block;
@@ -149,7 +175,7 @@
 
   /* =========================
    Promotional Banner
-========================= */
+    ========================= */
 
   .mega-menu__promo {
     position: relative;
@@ -165,7 +191,7 @@
 
   /* =========================
    Banner Image
-========================= */
+    ========================= */
 
   .mega-menu__promo-image {
     position: absolute;
@@ -182,7 +208,7 @@
 
   /* =========================
    Banner Content
-========================= */
+    ========================= */
 
   .mega-menu__promo-content {
     position: relative;
@@ -204,7 +230,7 @@
 
   /* =========================
    Promo Label
-========================= */
+    ========================= */
 
   .mega-menu__promo-label {
     margin-bottom: 8px;
@@ -218,7 +244,7 @@
 
   /* =========================
    Promo Heading
-========================= */
+    ========================= */
 
   .mega-menu__promo-content h3 {
     margin: 0 0 10px;
@@ -229,7 +255,7 @@
 
   /* =========================
    Promo Text
-========================= */
+    ========================= */
 
   .mega-menu__promo-content p {
     max-width: 300px;
@@ -242,7 +268,7 @@
 
   /* =========================
    Promo Button
-========================= */
+    ========================= */
 
   .mega-menu__promo-button {
     display: inline-block;
@@ -269,7 +295,7 @@
 
   /* =========================
    Responsive
-========================= */
+    ========================= */
 
   @media (max-width: 768px) {
     .mega-menu__content {

@@ -12,6 +12,20 @@
   "sections": {
     "navbar_amcUnN": {
       "type": "navbar",
+      "blocks": {
+        "mega_menu_Mwb3iV": {
+          "type": "mega_menu",
+          "settings": {
+            "handle": "catalog",
+            "mega_1": "snowboard",
+            "mega_2": "cars",
+            "mega_image_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "mega_menu_Mwb3iV"
+      ],
       "name": "Navbar",
       "settings": {
         "header_nav": "main-menu"
