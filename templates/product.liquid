@@ -106,8 +106,8 @@
       </h1>
 
       <!-- Product Price -->
-      <div class="product-info__price">
-        {{ product.price | money_with_currency }}
+      <div class="product-info__price" id="product-price">
+        {{ product.selected_or_first_available_variant.price | money_with_currency }}
       </div>
 
       {% form 'product', product, class: 'product-form' %}
@@ -117,14 +117,14 @@
             {% for option in product.options_with_values %}
               <div class="product-form__option">
                 <label
-                  for="Option-{{ section.id }}-{{ forloop.index }}"
+                  for="Option-{{ product.id }}-{{ forloop.index }}"
                   class="product-form__label"
                 >
                   {{ option.name }}
                 </label>
 
                 <select
-                  id="Option-{{ section.id }}-{{ forloop.index }}"
+                  id="Option-{{ product.id }}-{{ forloop.index }}"
                   class="product-form__select"
                   name="options[{{ option.name | escape }}]"
                 >
@@ -147,6 +147,7 @@
 
         <input
           type="hidden"
+          id="selected-variant-id"
           name="id"
           value="{{ product.selected_or_first_available_variant.id }}"
         >
@@ -315,6 +316,74 @@
       }
     });
   });
+</script>
+
+<script>
+  const variants = {{ product.variants | json }};
+
+  document.querySelectorAll('.product-form__select').forEach((select) => {
+    select.addEventListener('change', (e) => {
+      console.log(e.target.value);
+      updateVariant();
+    });
+  });
+
+  
+  document.addEventListener("DOMContentLoaded", ()=> {
+    updateVariant();
+  })
+  
+  async function updateVariant() {
+    try {
+      const selectedVariant = Array.from(document.querySelectorAll('.product-form__select')).map((select) => select.value);
+      console.log('SelectedVariant: ', selectedVariant);
+
+      const variant = variants.find((variant) => {
+        return variant.options.every((option, index) => {
+          return option === selectedVariant[index];
+        })
+      })
+
+      if(!variant){
+        console.log("No variant matching found");
+        return;
+      }
+
+      const variantInputId = document.getElementById('selected-variant-id');
+      if(variantInputId){
+        variantInputId.value = variant.id;
+      }
+      
+
+      const url = `{{ product.url }}?variant=${variant.id}&section_id=updated-variant`;
+      const response = await fetch(url);
+
+      if(!response){
+        throw new Error(`Request failed: ${response.status}`);
+      }
+
+
+      {% comment %} const response = await fetch(url);
+      const sections = await response.json(); {% endcomment %}
+
+      const html = await response.text();
+      if(!html){
+        throw new Error('Updated variant section was not returned');
+      }
+
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+
+      const newPrice = doc.querySelector('#updated-variant-price');
+      const currentPrice = document.getElementById('product-price');
+
+      if (newPrice && currentPrice) {
+        currentPrice.innerHTML = newPrice.innerHTML;
+      }
+    } catch (error) {
+      console.log('Error found in variant Updated', error);
+    }
+  }
 </script>
 
 <script>

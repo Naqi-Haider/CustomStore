@@ -1,0 +1,9 @@
+<div id="updated-variant-price">
+  {{ product.selected_or_first_available_variant.price | money_with_currency }}
+</div>
+
+{% comment %} {% schema %}
+{
+  "name": "Updated Variant"
+}
+{% endschema %} {% endcomment %}
